@@ -122,6 +122,8 @@ public class RsptPlugin extends Plugin
 	private volatile int refreshSeconds = DEFAULT_REFRESH_SECONDS;
 	/** The token error is shown in chat once, until the token changes or the player logs in again. */
 	private volatile boolean tokenErrorShown;
+	/** The "connected" line is shown once per login (or token change), after the first watchlist load. */
+	private volatile boolean connectedShown;
 	private volatile boolean running;
 
 	private final AtomicBoolean watchlistFetchInFlight = new AtomicBoolean();
@@ -216,6 +218,7 @@ public class RsptPlugin extends Plugin
 
 		if (matched.isEmpty())
 		{
+			log.debug("RSPT: loot from {} has no watched items", event.getName());
 			return;
 		}
 
@@ -270,6 +273,7 @@ public class RsptPlugin extends Plugin
 		watchlistDue = true;
 		watchlistFetchInFlight.set(false);
 		tokenErrorShown = false;
+		connectedShown = false;
 	}
 
 	private void fetchWatchlist(String token)
@@ -295,6 +299,12 @@ public class RsptPlugin extends Plugin
 				refreshSeconds = clampRefresh(response.refreshSeconds);
 				tokenErrorShown = false;
 				log.debug("RSPT watchlist loaded: {} items, refresh every {}s", ids.size(), refreshSeconds);
+				if (!connectedShown)
+				{
+					connectedShown = true;
+					String line = connectedText(response.user, ids.size());
+					clientThread.invokeLater(() -> chat(COL_EVENT + line + COL_END));
+				}
 			}
 			else if (code == 401 || code == 403)
 			{
@@ -302,7 +312,8 @@ public class RsptPlugin extends Plugin
 				if (!tokenErrorShown)
 				{
 					tokenErrorShown = true;
-					chat(COL_ERROR + Text.removeTags(errorText(response == null ? null : response.error, code)) + COL_END);
+					String error = errorText(response == null ? null : response.error, code);
+					clientThread.invokeLater(() -> chat(COL_ERROR + Text.removeTags(error) + COL_END));
 				}
 			}
 			else
@@ -464,6 +475,16 @@ public class RsptPlugin extends Plugin
 	private static String clean(String text)
 	{
 		return text == null ? "" : Text.removeTags(text);
+	}
+
+	private static String connectedText(String user, int items)
+	{
+		String who = clean(user).isEmpty() ? "" : " as " + clean(user);
+		if (items == 0)
+		{
+			return "Connected" + who + ". No event items count for you right now.";
+		}
+		return "Connected" + who + ". Watching " + items + (items == 1 ? " event item." : " event items.");
 	}
 
 	private static String errorText(String error, int code)

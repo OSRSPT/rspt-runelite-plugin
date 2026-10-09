@@ -10,7 +10,8 @@ it so the event tile is completed automatically, or queued for staff review.
 2. In RuneLite, open the **RSPT** plugin settings and paste it into **Plugin token**.
 
 The plugin does nothing until a token is set. Drops are detected through RuneLite's core
-**Loot Tracker** plugin, so keep it enabled (it is on by default).
+**Loot Tracker** plugin, so keep it enabled (it is on by default). After you log in, a chat line
+confirms the connection and how many event items are being watched for you.
 
 ## What is sent, and where
 
