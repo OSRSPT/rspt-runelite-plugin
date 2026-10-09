@@ -68,7 +68,7 @@ import net.runelite.client.util.Text;
 @Slf4j
 @PluginDescriptor(
 	name = "RSPT",
-	description = "Completa automaticamente itens dos eventos RSPT (event.rspt.pt) quando recebes o drop.",
+	description = "Automatically completes RSPT event items (event.rspt.pt) when you get the drop.",
 	tags = {"rspt", "clan", "bingo", "event", "loot", "portugal"}
 )
 @PluginDependency(LootTrackerPlugin.class)
@@ -331,7 +331,7 @@ public class RsptPlugin extends Plugin
 		catch (IOException | RuntimeException e)
 		{
 			log.warn("RSPT: could not capture screenshot, drop not sent", e);
-			clientThread.invokeLater(() -> chat(COL_ERROR + "Não foi possível capturar o ecrã. O drop não foi enviado." + COL_END));
+			clientThread.invokeLater(() -> chat(COL_ERROR + "Could not capture a screenshot. The drop was not sent." + COL_END));
 			return;
 		}
 
@@ -425,14 +425,14 @@ public class RsptPlugin extends Plugin
 				String item = clean(result.item);
 				String tile = clean(result.tile);
 				chat(event + (approved
-					? COL_APPROVED + item + " conta para '" + tile + "'!" + COL_END
-					: COL_PENDING + item + " enviado para validação do staff ('" + tile + "')." + COL_END));
+					? COL_APPROVED + item + " counts for '" + tile + "'!" + COL_END
+					: COL_PENDING + item + " sent for staff review ('" + tile + "')." + COL_END));
 			}
 		}
 
 		if (config.popup())
 		{
-			showPopup(clean(results.get(0).event), anyApproved ? "Item aceite!" : "Enviado para validação");
+			showPopup(clean(results.get(0).event), anyApproved ? "Item accepted!" : "Sent for staff review");
 		}
 	}
 
@@ -471,7 +471,7 @@ public class RsptPlugin extends Plugin
 
 	private static String errorText(String error, int code)
 	{
-		return error == null || error.isEmpty() ? "Erro do servidor (" + code + ")." : error;
+		return error == null || error.isEmpty() ? "Server error (" + code + ")." : error;
 	}
 
 	private static int clampRefresh(Integer seconds)
