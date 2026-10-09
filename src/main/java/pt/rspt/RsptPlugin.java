@@ -45,10 +45,8 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.ItemStack;
 import net.runelite.client.plugins.Plugin;
-import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.loottracker.LootReceived;
-import net.runelite.client.plugins.loottracker.LootTrackerPlugin;
 import net.runelite.client.ui.DrawManager;
 import net.runelite.client.util.Text;
 
@@ -71,7 +69,6 @@ import net.runelite.client.util.Text;
 	description = "Automatically completes RSPT event items (event.rspt.pt) when you get the drop.",
 	tags = {"rspt", "clan", "bingo", "event", "loot", "portugal"}
 )
-@PluginDependency(LootTrackerPlugin.class)
 public class RsptPlugin extends Plugin
 {
 	private static final String CHAT_PREFIX = "[RSPT] ";
