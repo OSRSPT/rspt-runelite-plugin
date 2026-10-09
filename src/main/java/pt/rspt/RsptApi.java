@@ -131,6 +131,8 @@ class RsptApi
 		boolean ok;
 		String user;
 		List<Integer> items;
+		/** Number of open events the items come from (missing on older servers). */
+		Integer events;
 		@SerializedName("refresh_seconds")
 		Integer refreshSeconds;
 		String error;

@@ -302,7 +302,7 @@ public class RsptPlugin extends Plugin
 				if (!connectedShown)
 				{
 					connectedShown = true;
-					String line = connectedText(response.user, ids.size());
+					String line = connectedText(response.user, response.events);
 					clientThread.invokeLater(() -> chat(COL_EVENT + line + COL_END));
 				}
 			}
@@ -477,14 +477,18 @@ public class RsptPlugin extends Plugin
 		return text == null ? "" : Text.removeTags(text);
 	}
 
-	private static String connectedText(String user, int items)
+	private static String connectedText(String user, Integer events)
 	{
 		String who = clean(user).isEmpty() ? "" : " as " + clean(user);
-		if (items == 0)
+		if (events == null)
 		{
-			return "Connected" + who + ". No event items count for you right now.";
+			return "Connected" + who + ".";
 		}
-		return "Connected" + who + ". Watching " + items + (items == 1 ? " event item." : " event items.");
+		if (events == 0)
+		{
+			return "Connected" + who + ". No open events for you right now.";
+		}
+		return "Connected" + who + ". Watching " + events + (events == 1 ? " event." : " events.");
 	}
 
 	private static String errorText(String error, int code)
